@@ -1,6 +1,7 @@
 var sqlMap = {
     user: {
-        search:"SELECT * FROM LoginValue",
+        search:"SELECT * FROM LoginValue ",
+        change:"UPDATE `LoginValue` SET "
     },
 }
 

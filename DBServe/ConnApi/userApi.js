@@ -6,7 +6,7 @@ const $sql = require('../ValueSome/sqlMap');
 const conn = mysql.createConnection(moudle.mysql);
 conn.connect();
 
-//显示连接数据测试用
+//显示连接数据测试
 const sel_email = $sql.user.search;
 conn.query(sel_email, function (error, results) {
     if (error) {
@@ -47,5 +47,22 @@ router.post('/login',(req,res)=>{
         }
     })
 });
+//password re
+router.post('/passRe',(req,res)=>{
+    const user = req.body;
+    const sel_email = $sql.user.change+" Password = '"+user.Password+"' where LoginValue.ID='"+user.ID+"'";
+    console.log(sel_email);
+    conn.query(sel_email, user.ID, (error, results)=>{
+        if (error) {
+            throw error;
+        }
+        console.log(results)
+        if (results === undefined) {
+            res.send("-1");  // error
+        } else{
+            res.send("1");  // OK
+        }
+    })
+})
 
 module.exports = router;
