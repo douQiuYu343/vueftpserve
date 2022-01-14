@@ -1,6 +1,6 @@
 const bodyParser = require('body-parser');
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
 const app = express();
 
 const userApi = require('./ConnApi/userApi.js');

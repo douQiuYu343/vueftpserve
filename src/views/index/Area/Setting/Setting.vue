@@ -110,7 +110,7 @@ export default {
           const self = this;
           self.axios({
             method:'post',
-            url: 'http://192.168.1.23:25564/api/user/passRe',
+            url: 'http://127.0.0.1:25564/api/user/passRe',
             data: {
               ID: self.$store.getters.userName,
               Password: self.ruleForm.checkPass
