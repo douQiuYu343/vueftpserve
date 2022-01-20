@@ -20,5 +20,9 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Major Environment versions
+```
+node@12.16.1
+npm@8.3.1
+vue-cli@@4.5
+```
