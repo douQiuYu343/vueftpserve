@@ -14,7 +14,7 @@
             <span>
              <el-upload
                  class="upload-demo"
-                 action="http://127.0.0.1:25564/ftpApi/upload/headImage"
+                 action="/api/ftpApi/upload/headImage"
                  :on-preview="handlePreview"
                  :before-upload="beforeUpload"
                  :on-remove="handleRemove"
@@ -23,21 +23,34 @@
                  :limit="1"
                  :on-exceed="handleExceed"
                  :file-list="fileList"
-                 :data="{ID:$store.getters.userName,FileName:this.FileName}">
+                 :data="{ID:this.$store.getters.userName,FileName:this.FileName}">
                   <el-button size="small" type="primary">点击上传</el-button>
               </el-upload>
             </span>
           </el-drawer>
-          <el-button type="info" @click="Change"> 重命名 </el-button>
-          <el-button type="info" @click="Delete"> 删除 </el-button>
-          <el-button type="info" @click="Look"> 查看 </el-button>
+          <span>
+          <el-button type="info" @click="drawer1 = true"> 新建文件夹</el-button>
+          <el-drawer v-model="drawer1" title="I am the title" :with-header="false">
+            <span>
+              <el-form ref="formRef" label-width="120px">
+                <el-form-item label="文件名">
+                 <el-input v-model="FileNa"></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="NewFile">确认</el-button>
+                </el-form-item>
+                </el-form>
+            </span>
+          </el-drawer>
+          </span>
         </el-button-group>
       </div>
       <div align="left">
         <el-button-group>
         <el-row>
           <el-col :span="4.5"><el-button type="info" @click="ReBack" icon="Back"> 返回 </el-button></el-col>
-          <el-col :span="19"><el-input v-model="FileName" placeholder="文件位置"/></el-col>
+          <el-col :span="18"><el-input v-model="FileName" placeholder="文件位置"/></el-col>
+          <el-col :span="1"><el-button type="info" @click="pwdCon" icon="Refresh"></el-button></el-col>
         </el-row>
         </el-button-group>
       </div>
@@ -57,7 +70,7 @@
           <el-table-column fixed="right" label="操作" width="120">
             <template v-slot="scope">
               <el-button type="text" size="small" @click="handleClick(scope.row)">查看</el-button>
-              <el-button type="text" size="small" @click="handleClick1">删除</el-button>
+              <el-button type="text" size="small" @click="handleClick1(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -77,6 +90,8 @@ export default {
       loading:false,
       loading1:false,
       drawer:false,
+      drawer1:false,
+      FileNa:'',
       FileName:'',
       defaultHeight: {
         height: ""
@@ -146,6 +161,29 @@ export default {
         }
       }
     },
+    NewFile(){
+      const self = this;
+      this.loading=true;
+      self.axios({
+        method:'post',
+        url: '/api/ftpApi/FtpNewFile',
+        data: {
+          ID:this.$store.getters.userName,
+          FileName:this.FileName,
+          FileNa:this.FileNa,
+        }
+      })
+          .then( res => {
+            console.log(res)
+
+            this.loading=false
+          })
+          .catch( err => {
+            console.log(err);
+          })
+      this.pwdCon()
+      this.loading=false;
+    },
     ListFile(Value){
       this.loading=true
       if(Value.type==="文件夹"){
@@ -154,9 +192,10 @@ export default {
     },
     pwdCon(){
       const self = this;
+      this.loading=true;
       self.axios({
         method:'post',
-        url: 'http://127.0.0.1:25564/ftpApi/FtpListFound',
+        url: '/api/ftpApi/FtpListFound',
         data: {
           ID:this.$store.getters.userName,
           FileName:this.FileName,
@@ -215,7 +254,7 @@ export default {
       const self = this;
       self.axios({
         method:'post',
-        url: 'http://127.0.0.1:25564/ftpApi/ftpUpload',
+        url: '/api/ftpApi/ftpUpload',
         data: {
           ID:this.$store.getters.userName,
           FilePath:this.FileName
@@ -258,7 +297,7 @@ export default {
       const self = this;
       self.axios({
         method:'post',
-        url: 'http://127.0.0.1:25564/ftpApi/FtpListLook',
+        url: '/api/ftpApi/FtpListLook',
         data: {
           ID:this.$store.getters.userName,
           tableData:[
@@ -326,7 +365,7 @@ export default {
         const self = this;
         self.axios({
           method:'post',
-          url: 'http://127.0.0.1:25564/ftpApi/FtpListFound',
+          url: '/api/ftpApi/FtpListFound',
           data: {
             ID:this.$store.getters.userName,
             FileName:this.FileName,
@@ -389,11 +428,33 @@ export default {
         this.loading=false
       }
     },
-    handleClick1(){
-      ElMessage({
-        showClose: true,
-        message: '暂时不能删除',
-        type: 'error',
+    handleClick1(row){
+      this.axios({
+        method:'post',
+        url:'/api/ftpApi/ftpDelete',
+        data:{
+          ID:this.$store.getters.userName,
+          FileName:this.FileName,
+          FilePath: row.name,
+          FileType:row.type,
+        },
+      }).then(res =>{
+        if(res.data===1){
+          ElMessage({
+            showClose: true,
+            message: '删除成功',
+            type: 'success',
+          })
+        }else if(res.data===-1){
+          ElMessage({
+            showClose: true,
+            message: '删除失败',
+            type: 'error',
+          })
+        }
+        this.pwdCon();
+      }).then(err =>{
+        console.log(err)
       })
     },
     setCurrent(row) {

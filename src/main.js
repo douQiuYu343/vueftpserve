@@ -16,6 +16,7 @@ import * as ElIconModules from '@element-plus/icons'
 //).mount('#app')
 
 const app = createApp(App);
+
 for(let iconName in ElIconModules){
     app.component(iconName,ElIconModules[iconName])
 }

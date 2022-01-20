@@ -12,11 +12,6 @@
               {{$store.getters.userName}}
             </div>
           </el-form-item>
-          <el-form-item label="绑定邮箱">
-            <div align="left">
-              {{}}
-            </div>
-          </el-form-item>
           <el-form-item label="Activity form">
             <el-input v-model="formLabelAlign.type"></el-input>
           </el-form-item>
@@ -110,7 +105,7 @@ export default {
           const self = this;
           self.axios({
             method:'post',
-            url: 'http://127.0.0.1:25564/api/user/passRe',
+            url: '/api/user/passRe',
             data: {
               ID: self.$store.getters.userName,
               Password: self.ruleForm.checkPass

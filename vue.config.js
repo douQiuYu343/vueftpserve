@@ -1,5 +1,14 @@
 module.exports = {
-    publicPath: process.env.NODE_ENV === 'production' ?
-        './' :
-        '/'
+    devServer: {
+        proxy: {
+            '/api/*': {
+                target: 'http://127.0.0.1:25564',
+                ws: true,
+                changeOrigin: true,
+                pathRewrite:{
+                    '^/api': ''
+                },
+            },
+        }
+    }
 }

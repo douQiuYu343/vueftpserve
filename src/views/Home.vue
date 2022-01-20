@@ -90,7 +90,7 @@ export default {
       if (self.ruleForm.name !== "" && self.ruleForm.pass !== "") {
         self.axios({
           method:'post',
-          url: 'http://127.0.0.1:25564/api/user/login',
+          url: '/api/user/login',
           data: {
             ID: self.ruleForm.name,
             Password: self.ruleForm.pass

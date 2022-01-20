@@ -23,7 +23,7 @@ app.all('*', function (req, res, next) {
     next();
 });
 
-app.use("/api/user",userApi);
+app.use("/user",userApi);
 app.use("/ftpApi",ftpApi)
 
 app.listen(25564);
