@@ -1,6 +1,6 @@
 <template>
     <el-container>
-      <el-header class="header-font">滁州儒林外国语学校文件服务器Web客户端</el-header>
+      <el-header class="header-font">xxxx文件服务器Web客户端</el-header>
       <el-main
           :style="defaultHeight"
       ><div align="center">
